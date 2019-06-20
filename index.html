@@ -1,117 +1,12 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title></title>
-		<style>
-			*{
-				margin: 0;
-				padding: 0;
-			}
-			.banner{
-				margin-top: 10px;
-			}
-			.box{
-				top: 50px;
-				left: 100px;
-				position: relative;
-				height: 400px;
-				width: 800px;
-				border: 1px solid #f0f;
-			}
-			li{
-				width: 200px;
-				height: 200px;
-				text-align: center;
-				border: 1px solid #f00;
-				position: absolute;
-			}
-			.inner{
-				width: 100%;
-				height: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="header">
-			<input type="text" placeholder="请输入愿望"/>
-		</div>
-		<div class="banner">
-			<button>提交</button>
-		</div>
-		<ul class="box">
-			
-		</ul>
-	</body>
-	<script src="img/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript">
-		var count = -1;
-		var arr = [{heng:"0px",shu:"0px"},{heng:"200px",shu:"0px"},{heng:"400px",shu:"0px"},{heng:"600px",shu:"0px"},
-		{heng:"0px",shu:"200px"},{heng:"200px",shu:"200px"},{heng:"400px",shu:"200px"},{heng:"600px",shu:"200px"}]
-		var arr1 = [];
-		while (arr1.length < 8){
-			var s = arr[parseInt(Math.random()*arr.length)];
-			if (arr1.indexOf(s) == -1) {
-				arr1.push(s)
-			}	
-		}
-		$("button").click(function(){
-			count ++;
-			console.log(arr1[count].heng)
-			$.post("http://localhost:8080/add",{content:$("input").val(),
-			postion_x:arr1[count].heng,postion_y:arr1[count].shu,suc:0},function(res){
-				console.log(res)
-				getMsg()
-			})
-		})
-		function getMsg(){
-			$.get("http://localhost:8080/hop",function(res){
-				console.log(res)
-				console.log(res.length)
-					var str = "";
-					for (var i = 0; i < res.length; i++) {
-						str += `
-							<li suc = "${res[i].suc}">
-								<div class="inner"><button onclick = "del('${res[i]._id}')">删除</button></div>
-								<div class="inner">${res[i].content}</div>
-								<div class="inner"><input type="checkbox" class="checking" _id = "${res[i]._id}"/></div>
-							</li>
-						`
-					}
-				$("ul").html(str)
-			
-				$("li").each(function(index,item){
-					if ($(this).attr("suc") == 1) {
-						$(this).css("background","#00f")
-					}
-					$(this).css({
-						"left":res[index].postion_x,
-						"top":res[index].postion_y
-					})
-				})
-			})
-			console.log($("input"))
-		}
-		getMsg()
-		function del(id){
-			$.get("http://localhost:8080/del",{_id:id},function(res){
-				getMsg()
-			})
-		}
-		var sum = -1;
-		$("ul").on("click",".checking",function(){
-			sum *= -1;
-			let tag = $(this).attr("_id")
-			console.log(tag)
-			if (sum > 0) {
-				$.get("http://localhost:8080/tag",{_id:tag,suc:1},function(){
-					getMsg()
-				})
-			} else{
-				$.get("http://localhost:8080/tag",{_id:tag,suc:0},function(){
-					getMsg()
-				})
-			}
-		})
-	</script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>played</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
 </html>
